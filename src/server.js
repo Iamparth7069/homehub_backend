@@ -12,7 +12,7 @@ const startServer = async () => {
 
   app.listen(env.port, () => {
     console.log(`Server running in ${env.nodeEnv} mode on port ${env.port}`);
-    console.log(`Health check: http://localhost:${env.port}${env.apiPrefix}/health`);
+    console.log(`API base: http://localhost:${env.port}${env.apiPrefix}`);
   });
 };
 

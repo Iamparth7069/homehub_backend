@@ -1,4 +1,4 @@
-const { body, query } = require("express-validator");
+const { body } = require("express-validator");
 
 const registerRules = [
   body("email")
@@ -54,19 +54,6 @@ const loginRules = [
     .withMessage("Password is required"),
 ];
 
-const checkEmailRules = [
-  body("email")
-    .optional()
-    .trim()
-    .isEmail()
-    .withMessage("Please provide a valid email address"),
-  query("email")
-    .optional()
-    .trim()
-    .isEmail()
-    .withMessage("Please provide a valid email address"),
-];
-
 const accountSetupRules = [
   body("fullName")
     .optional()
@@ -105,6 +92,5 @@ const accountSetupRules = [
 module.exports = {
   registerRules,
   loginRules,
-  checkEmailRules,
   accountSetupRules,
 };

@@ -1,0 +1,378 @@
+{
+	"info": {
+		"_postman_id": "a8f7c9e1-4567-4890-a123-homehubbackend01",
+		"name": "HomeHub Backend API",
+		"description": "Complete Postman collection for HomeHub backend services hosted on Render (https://homehub-backend-en2j.onrender.com). Includes Auth, Account Setup, Profile, Get Current User, and Cloudinary Media Uploads.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "https://homehub-backend-en2j.onrender.com",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "userId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "publicId",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "1. Server Info",
+			"item": [
+				{
+					"name": "Root URL Info",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								""
+							]
+						},
+						"description": "Check base server response and API documentation link."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "2. Authentication & Profile",
+			"item": [
+				{
+					"name": "Register User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    const jsonData = pm.response.json();",
+									"    if (jsonData.data && jsonData.data.token) {",
+									"        pm.collectionVariables.set(\"token\", jsonData.data.token);",
+									"        console.log(\"Saved token:\", jsonData.data.token);",
+									"    }",
+									"    if (jsonData.data && jsonData.data.user && jsonData.data.user._id) {",
+									"        pm.collectionVariables.set(\"userId\", jsonData.data.user._id);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"parth@example.com\",\n  \"password\": \"Password@123\",\n  \"fullName\": \"Parth Patel\",\n  \"nickname\": \"Parth\",\n  \"phoneNumber\": \"+91 9876543210\",\n  \"dob\": \"1998-05-15\",\n  \"address\": \"Ahmedabad, Gujarat, India\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/auth/register",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"register"
+							]
+						},
+						"description": "Registers a new user and automatically saves the JWT token into the collection variable {{token}}."
+					},
+					"response": []
+				},
+				{
+					"name": "Login User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const jsonData = pm.response.json();",
+									"    if (jsonData.data && jsonData.data.token) {",
+									"        pm.collectionVariables.set(\"token\", jsonData.data.token);",
+									"        console.log(\"Saved token:\", jsonData.data.token);",
+									"    }",
+									"    if (jsonData.data && jsonData.data.user && jsonData.data.user._id) {",
+									"        pm.collectionVariables.set(\"userId\", jsonData.data.user._id);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"parth@example.com\",\n  \"password\": \"Password@123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"login"
+							]
+						},
+						"description": "Logs in user with email & password and automatically stores the JWT token in {{token}}."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Account Setup / Profile (PATCH)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"fullName\": \"Parth Patel (Updated)\",\n  \"nickname\": \"Parth\",\n  \"phoneNumber\": \"+91 9998887776\",\n  \"dob\": \"1998-05-15\",\n  \"address\": \"SG Highway, Ahmedabad\",\n  \"imageUrl\": \"https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200\",\n  \"accountSetup\": true\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/auth/account-setup",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"account-setup"
+							]
+						},
+						"description": "Updates account setup / profile data for current user."
+					},
+					"response": []
+				},
+				{
+					"name": "Upload User Avatar (Direct to Cloudinary)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const jsonData = pm.response.json();",
+									"    if (jsonData.data && jsonData.data.publicId) {",
+									"        pm.collectionVariables.set(\"publicId\", jsonData.data.publicId);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/auth/upload-avatar",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"upload-avatar"
+							]
+						},
+						"description": "Uploads user avatar image directly to Cloudinary and saves URL in current user's profile."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "3. User Profile",
+			"item": [
+				{
+					"name": "Get Current User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/users",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users"
+							]
+						},
+						"description": "Fetch the authenticated user's profile using the Bearer token (no user id required)."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "4. Media & Cloudinary Uploads",
+			"item": [
+				{
+					"name": "Upload Media / File",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    const jsonData = pm.response.json();",
+									"    if (jsonData.data && jsonData.data.publicId) {",
+									"        pm.collectionVariables.set(\"publicId\", jsonData.data.publicId);",
+									"        console.log(\"Saved publicId:\", jsonData.data.publicId);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "folder",
+									"value": "homehub/general",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/uploads",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"uploads"
+							]
+						},
+						"description": "Uploads any supported image (jpeg, png, webp) to Cloudinary and returns the hosted URL & publicId."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete File from Cloudinary",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"publicId\": \"{{publicId}}\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/uploads",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"uploads"
+							]
+						},
+						"description": "Deletes an image asset from Cloudinary using its publicId."
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

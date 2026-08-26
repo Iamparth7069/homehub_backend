@@ -20,7 +20,7 @@ const createApp = () => {
     res.json({
       success: true,
       message: "Backend API",
-      docs: `${env.apiPrefix}/health`,
+      docs: `${env.apiPrefix}/auth/login`,
     });
   });
 

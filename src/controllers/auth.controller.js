@@ -20,21 +20,6 @@ const login = asyncHandler(async (req, res) => {
     .json(new ApiResponse(HTTP_STATUS.OK, MESSAGES.LOGIN_SUCCESS, result));
 });
 
-const checkEmail = asyncHandler(async (req, res) => {
-  const email = req.body.email || req.query.email || "";
-  const result = await authService.checkEmail(email);
-  res
-    .status(HTTP_STATUS.OK)
-    .json(new ApiResponse(HTTP_STATUS.OK, "Email check completed", result));
-});
-
-const getMe = asyncHandler(async (req, res) => {
-  const user = await authService.getMe(req.user.id);
-  res
-    .status(HTTP_STATUS.OK)
-    .json(new ApiResponse(HTTP_STATUS.OK, "Current user profile fetched", user));
-});
-
 const updateAccountSetup = asyncHandler(async (req, res) => {
   const user = await authService.updateAccountSetup(req.user.id, req.body);
   res
@@ -68,8 +53,6 @@ const uploadAvatar = asyncHandler(async (req, res) => {
 module.exports = {
   register,
   login,
-  checkEmail,
-  getMe,
   updateAccountSetup,
   uploadAvatar,
 };

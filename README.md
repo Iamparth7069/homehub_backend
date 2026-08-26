@@ -88,16 +88,11 @@ CLOUDINARY_FOLDER=backend-api
 
 ## Endpoints
 
-| Method | Path                    | Description        |
-|--------|-------------------------|--------------------|
-| GET    | `/api/v1/health`        | Health check       |
-| GET    | `/api/v1/users`         | List users         |
-| GET    | `/api/v1/users/:id`     | Get user by id     |
-| POST   | `/api/v1/users`         | Create user        |
-| PATCH  | `/api/v1/users/:id`     | Update user        |
-| DELETE | `/api/v1/users/:id`     | Delete user        |
-| POST   | `/api/v1/uploads`       | Upload image       |
-| DELETE | `/api/v1/uploads`       | Delete image       |
+| Method | Path                    | Description                          |
+|--------|-------------------------|--------------------------------------|
+| GET    | `/api/v1/users`         | Get current user (Bearer token)      |
+| POST   | `/api/v1/uploads`       | Upload image                         |
+| DELETE | `/api/v1/uploads`       | Delete image                         |
 
 ### Upload image
 
@@ -117,12 +112,11 @@ curl -X DELETE http://localhost:3000/api/v1/uploads \
   -d '{"publicId":"backend-api/abc123"}'
 ```
 
-### Create user example
+### Get current user
 
 ```bash
-curl -X POST http://localhost:3000/api/v1/users \
-  -H "Content-Type: application/json" \
-  -d '{"name":"Ada Lovelace","email":"ada@example.com"}'
+curl http://localhost:3000/api/v1/users \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"
 ```
 
 Users are stored in MongoDB. Set `MONGODB_URI` in `.env` before starting the server.

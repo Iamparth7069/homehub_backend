@@ -86,24 +86,6 @@ const login = async ({ email, password }) => {
   return { user: userResponse, token };
 };
 
-const checkEmail = async (email) => {
-  const normalizedEmail = email.toLowerCase().trim();
-  const user = await User.findOne({ email: normalizedEmail });
-  return {
-    email: normalizedEmail,
-    exists: Boolean(user),
-    isAvailable: !user,
-  };
-};
-
-const getMe = async (userId) => {
-  const user = await User.findById(userId);
-  if (!user) {
-    throw new ApiError(HTTP_STATUS.NOT_FOUND, MESSAGES.USER_NOT_FOUND);
-  }
-  return user;
-};
-
 const updateAccountSetup = async (userId, payload) => {
   const user = await User.findById(userId);
   if (!user) {
@@ -145,7 +127,5 @@ module.exports = {
   generateToken,
   register,
   login,
-  checkEmail,
-  getMe,
   updateAccountSetup,
 };
