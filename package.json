@@ -2,11 +2,15 @@
   "name": "backend-api",
   "version": "1.0.0",
   "description": "Node.js backend API with a standard layered folder structure",
-  "main": "src/server.js",
+  "main": "./dist/server.js",
+  "directories": {
+    "lib": "lib"
+  },
   "scripts": {
-    "start": "node src/server.js",
-    "dev": "nodemon src/server.js",
-    "test": "node --test tests/**/*.test.js"
+    "start": "node ./dist/server.js",
+    "dev": "ts-node-dev --respawn --transpile-only ./lib/server.ts",
+    "build": "tsc -p tsconfig.build.json",
+    "test": "node --require ts-node/register --test lib/test/**/*.test.ts"
   },
   "keywords": [
     "nodejs",
@@ -34,6 +38,16 @@
     "multer": "^1.4.5-lts.1"
   },
   "devDependencies": {
-    "nodemon": "^3.1.9"
+    "@types/bcryptjs": "^2.4.6",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/morgan": "^1.9.10",
+    "@types/multer": "^2.2.0",
+    "@types/node": "^26.4.0",
+    "nodemon": "^3.1.9",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.5.4"
   }
 }
